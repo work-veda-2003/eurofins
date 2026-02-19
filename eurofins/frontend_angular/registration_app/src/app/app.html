@@ -1,133 +1,112 @@
-<div class="container">
-  <div class="glass-header">
-    <h1>Veda Portal</h1>
-    <p>Seamless Onboarding for Eurofins Professionals</p>
-  </div>
+<div class="auth-container" *ngIf="!authService.currentUser()">
 
-  <!-- AUTH SECTION (Show if NOT logged in) -->
-  <div class="auth-wrapper" *ngIf="!authService.currentUser()">
-    <div class="card auth-card">
-      <div class="auth-header">
-        <h2>{{ isLoginMode ? 'Welcome Back' : 'Join the Network' }}</h2>
-        <p>{{ isLoginMode ? 'Login to your account' : 'Fill in your details to register' }}</p>
-      </div>
+  <!-- Left Column: Forms -->
+  <div class="form-section">
+    <div class="form-container">
 
-      <!-- Error Alert -->
-      <div *ngIf="authError()" class="alert error">
-        {{ authError() }}
-      </div>
+      <!-- Login Form View -->
+      <div *ngIf="isLoginMode">
+        <div class="form-header">Login</div>
 
-      <!-- Success Alert (e.g. after logout) -->
-      <div *ngIf="authSuccess()" class="alert success">
-        {{ authSuccess() }}
-      </div>
+        <div *ngIf="authError()" class="alert alert-error">{{ authError() }}</div>
+        <div *ngIf="authSuccess()" class="alert alert-success">{{ authSuccess() }}</div>
 
-      <!-- Login Form -->
-      <form *ngIf="isLoginMode" (ngSubmit)="onLogin()" #loginForm="ngForm">
-        <div class="form-group">
-          <label for="loginUsername">Username</label>
-          <input type="text" id="loginUsername" name="username" [(ngModel)]="loginData.username" required
-            placeholder="Enter username">
+        <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+          <div class="form-group">
+            <label>Username or Email Address</label>
+            <input type="text" name="username" [(ngModel)]="loginData.username" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" [(ngModel)]="loginData.password" required>
+          </div>
+
+          <div class="checkbox-group">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember Me</label>
+          </div>
+
+          <button type="submit" class="btn-login" [disabled]="!loginForm.form.valid">Log In</button>
+        </form>
+
+        <div class="footer-links">
+          <a href="javascript:void(0)">Lost Your Password?</a>
         </div>
-        <div class="form-group">
-          <label for="loginPassword">Password</label>
-          <input type="password" id="loginPassword" name="password" [(ngModel)]="loginData.password" required
-            placeholder="••••••••">
-        </div>
-        <button type="submit" class="btn-primary" [disabled]="!loginForm.form.valid">
-          Login to Portal
-        </button>
-      </form>
-
-      <!-- Register Form -->
-      <form *ngIf="!isLoginMode" (ngSubmit)="onRegister()" #regForm="ngForm">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="regUsername">Username</label>
-            <input type="text" id="regUsername" name="regUsername" [(ngModel)]="registerData.username" required
-              placeholder="Choose username">
-          </div>
-          <div class="form-group">
-            <label for="regPassword">Password</label>
-            <input type="password" id="regPassword" name="regPassword" [(ngModel)]="registerData.password" required
-              placeholder="Choose password">
-          </div>
-          <div class="form-group">
-            <label for="regFirstName">First Name</label>
-            <input type="text" id="regFirstName" name="firstName" [(ngModel)]="registerData.firstName" required
-              placeholder="John">
-          </div>
-          <div class="form-group">
-            <label for="regLastName">Last Name</label>
-            <input type="text" id="regLastName" name="lastName" [(ngModel)]="registerData.lastName" required
-              placeholder="Doe">
-          </div>
-          <div class="form-group">
-            <label for="regEmail">Email Address</label>
-            <input type="email" id="regEmail" name="email" [(ngModel)]="registerData.email" required
-              placeholder="john.doe@eurofins.com">
-          </div>
-          <div class="form-group">
-            <label for="regPhone">Phone Number</label>
-            <input type="text" id="regPhone" name="phone" [(ngModel)]="registerData.phone" required
-              placeholder="+1 (555) 000-0000">
-          </div>
-        </div>
-        <button type="submit" class="btn-primary" [disabled]="!regForm.form.valid">
-          Complete Registration
-        </button>
-      </form>
-
-      <div class="auth-footer">
-        <p>
-          {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
-          <span (click)="toggleMode()" class="link">{{ isLoginMode ? 'Create Account' : 'Back to Login' }}</span>
-        </p>
       </div>
+
+      <!-- Register Form View -->
+      <div *ngIf="!isLoginMode">
+        <div class="form-header">Register</div>
+
+        <div *ngIf="authError()" class="alert alert-error">{{ authError() }}</div>
+
+        <form (ngSubmit)="onRegister()" #regForm="ngForm">
+          <div class="reg-grid">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" name="regUsername" [(ngModel)]="registerData.username" required>
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" name="regPassword" [(ngModel)]="registerData.password" required>
+            </div>
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" name="firstName" [(ngModel)]="registerData.firstName" required>
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" name="lastName" [(ngModel)]="registerData.lastName" required>
+            </div>
+            <div class="form-group" style="grid-column: span 2;">
+              <label>Email Address</label>
+              <input type="email" name="email" [(ngModel)]="registerData.email" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-login" [disabled]="!regForm.form.valid">Create Account</button>
+        </form>
+      </div>
+
     </div>
   </div>
 
-  <!-- DASHBOARD SECTION (Show only if logged in) -->
-  <div class="dashboard-wrapper" *ngIf="authService.currentUser()">
-    <div class="user-welcome">
-      <div class="welcome-text">
-        <h2>Welcome, {{ authService.currentUser()?.firstName }}!</h2>
-        <p class="role-badge">Verified Member</p>
-      </div>
-      <button class="btn-logout" (click)="onLogout()">Sign Out</button>
-    </div>
+  <!-- Right Column: Splash -->
+  <div class="splash-section">
+    <h1>{{ isLoginMode ? 'Register' : 'Login' }}</h1>
+    <p>{{ isLoginMode ? "Don't have an account? Register one!" : "Already have an account? Sign in!" }}</p>
+    <button class="btn-outline" (click)="toggleMode()">
+      {{ isLoginMode ? 'Register an Account' : 'Back to Login' }}
+    </button>
+  </div>
 
-    <!-- Success message on dashboard -->
-    <div *ngIf="authSuccess()" class="alert success">
-      {{ authSuccess() }}
-    </div>
+</div>
 
-    <div class="main-grid">
-      <div class="card list-card full-width">
-        <div class="card-header">
-          <div class="header-titles">
-            <h2>Member Directory</h2>
-            <p>{{ users().length }} Professionals registered</p>
-          </div>
-          <button class="btn-refresh" (click)="loadUsers()">Refresh</button>
-        </div>
+<!-- LOGGED IN VIEW -->
+<div class="dashboard-container" *ngIf="authService.currentUser()">
+  <div class="dash-header">
+    <h2>Welcome, {{ authService.currentUser()?.firstName }}!</h2>
+    <button class="btn-outline" (click)="onLogout()">Log Out</button>
+  </div>
 
-        <div class="user-list">
-          <div *ngFor="let user of users()" class="user-item">
-            <div class="user-info">
-              <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-              <p>{{ user.email }} • {{ user.phone }}</p>
-              <span class="username-badge">@{{ user.username }}</span>
-            </div>
-            <div class="user-meta">
-              <span class="badge">{{ user.registeredAt | date:'medium' }}</span>
-            </div>
-          </div>
-          <div *ngIf="users().length === 0" class="empty-state">
-            Looking for other members...
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="user-list">
+    <div *ngIf="authSuccess()" class="alert alert-success">{{ authSuccess() }}</div>
+
+    <h3>Registered Members</h3>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+      <thead style="background: #f4f7f6; text-align: left;">
+        <tr>
+          <th style="padding: 1rem; border-bottom: 2px solid #ddd;">Name</th>
+          <th style="padding: 1rem; border-bottom: 2px solid #ddd;">Email</th>
+          <th style="padding: 1rem; border-bottom: 2px solid #ddd;">Username</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users()">
+          <td style="padding: 1rem; border-bottom: 1px solid #eee;">{{ user.firstName }} {{ user.lastName }}</td>
+          <td style="padding: 1rem; border-bottom: 1px solid #eee;">{{ user.email }}</td>
+          <td style="padding: 1rem; border-bottom: 1px solid #eee;">@{{ user.username }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="glass-header">
+    <h1>Veda Registration Portal</h1>
+    <p>Seamless Onboarding for Eurofins Professionals</p>
+  </div>
+
+  <div class="main-grid">
+    <div class="card registration-card">
+      <h2>Register New Candidate</h2>
+      <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" [(ngModel)]="newUser.firstName" required placeholder="Enter first name">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" [(ngModel)]="newUser.lastName" required placeholder="Enter last name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" [(ngModel)]="newUser.email" required placeholder="candidate@eurofins.com">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" name="phone" [(ngModel)]="newUser.phone" required placeholder="+1 (555) 000-0000">
+        </div>
+        <button type="submit" class="btn-primary" [disabled]="!userForm.form.valid">
+          Complete Registration
+        </button>
+      </form>
+    </div>
+
+    <div class="card list-card">
+      <h2>Recently Registered</h2>
+      <div class="user-list">
+        <div *ngFor="let user of users()" class="user-item">
+          <div class="user-info">
+            <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+            <p>{{ user.email }}</p>
+          </div>
+          <div class="user-meta">
+            <span class="badge">{{ user.registeredAt | date:'short' }}</span>
+          </div>
+        </div>
+        <div *ngIf="users().length === 0" class="empty-state">
+          No candidates registered yet.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

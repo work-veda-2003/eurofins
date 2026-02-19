@@ -1,0 +1,46 @@
+.auth-card {
+  width: 350px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #3f51b5;
+}
+
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 10px;
+  background: #3f51b5;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.link {
+  display: block;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+}
